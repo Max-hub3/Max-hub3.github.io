@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Max — Personal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white: #f5f5f3;
+      --grey-light: #e0dedd;
+      --grey-mid: #9e9c9a;
+      --grey-dark: #3a3a38;
+      --black: #111110;
+      --serif: 'Playfair Display', Georgia, serif;
+      --mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    /* HEADER */
+    header {
+      position: static;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 3rem;
+      border-bottom: 1px solid var(--grey-light);
+      background: rgba(245,245,243,0.92);
+      backdrop-filter: blur(14px);
+      z-index: 50;
+      animation: slideDown 0.6s ease forwards;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    nav { display: flex; gap: 2.2rem; }
+    nav a {
+      text-decoration: none;
+      color: var(--grey-dark);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--black); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 0;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 3rem 6rem 5rem;
+      border-right: 1px solid var(--grey-light);
+    }
+
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.6rem, 7vw, 6.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.45s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--grey-dark); }
+
+    .hero-desc {
+      font-size: 0.88rem;
+      color: var(--grey-dark);
+      max-width: 380px;
+      line-height: 1.95;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    /* HERO RIGHT — Discord-style profile card */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .dc-card {
+      width: 300px;
+      background: #18181a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      opacity: 0;
+      animation: popIn 0.8s cubic-bezier(.22,1,.36,1) 0.7s forwards;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.88) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .dc-banner {
+      height: 80px;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+      position: relative;
+    }
+    .dc-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.015) 10px,
+        rgba(255,255,255,0.015) 20px
+      );
+    }
+
+    .dc-avatar-wrap {
+      position: absolute;
+      bottom: -38px;
+      left: 18px;
+    }
+
+    .dc-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #555 0%, #333 100%);
+      border: 5px solid #18181a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-style: italic;
+      color: #aaa;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .dc-avatar:hover { transform: scale(1.06); }
+
+    .dc-status {
+      position: absolute;
+      bottom: 4px; right: 4px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #23a55a;
+      border: 3px solid #18181a;
+    }
+
+    .dc-body {
+      padding: 48px 18px 18px;
+    }
+
+    .dc-username {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .dc-tag {
+      font-size: 0.72rem;
+      color: #888;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
+
+    .dc-divider {
+      height: 1px;
+      background: #2e2e30;
+      margin: 14px 0;
+    }
+
+    .dc-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .dc-about {
+      font-size: 0.78rem;
+      color: #ccc;
+      line-height: 1.65;
+    }
+
+    .dc-badges {
+      display: flex;
+      gap: 6px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .dc-badge {
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: #2a2a2a;
+      color: #aaa;
+      border: 1px solid #333;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      border-top: 1px solid var(--grey-light);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      padding: 6rem 5rem;
+    }
+
+    .about-text p { color: var(--grey-dark); line-height: 2; margin-bottom: 1rem; }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 2.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--grey-mid);
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.4rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--grey-light);
+      border: 1px solid var(--grey-light);
+      height: fit-content;
+      margin-top: 1rem;
+    }
+    .stat {
+      background: var(--white);
+      padding: 2rem 1.6rem;
+    }
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+    }
+
+    /* ── PROJECTS ── */
+    #projects {
+      padding: 6rem 5rem;
+      border-top: 1px solid var(--grey-light);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .project-card {
+      background: var(--black);
+      color: var(--white);
+      padding: 2.4rem 2rem;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.2s;
+    }
+    .project-card.visible { opacity: 1; transform: translateY(0); }
+    .project-card:hover { background: var(--grey-dark); }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--grey-mid), transparent);
+    }
+
+    .project-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 0.8rem;
+    }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .project-desc {
+      font-size: 0.8rem;
+      color: #aaa;
+      line-height: 1.85;
+      margin-bottom: 1.6rem;
+    }
+
+    .project-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .project-link:hover { color: var(--white); }
+    .project-link svg { flex-shrink: 0; }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--black);
+      color: var(--white);
+      padding: 6rem 5rem;
+      border-top: 1px solid var(--grey-dark);
+    }
+
+    #contact .section-label { color: var(--grey-mid); }
+    #contact .section-label::before { background: var(--grey-mid); }
+    #contact .section-title { color: var(--white); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .contact-item {
+      border: 1px solid #2a2a2a;
+      padding: 1.8rem;
+      border-radius: 4px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-item:hover { border-color: #444; background: #1a1a1a; }
+
+    .contact-item-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 0.6rem;
+    }
+
+    .contact-item-name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .contact-item-links a {
+      font-size: 0.72rem;
+      color: var(--grey-mid);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .contact-item-links a:hover { color: var(--white); }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      color: var(--grey-dark);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid #1e1e1e;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.from-left {
+      transform: translateX(-40px);
+    }
+    .reveal.from-right {
+      transform: translateX(40px);
+    }
+    .reveal.scale-in {
+      transform: scale(0.92);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0) translateX(0) scale(1);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── SNOW ── */
+    #snow-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* ── ANIMATED BANNER ── */
+    #top-banner {
+      width: 100%;
+      height: 48px;
+      background: var(--black);
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .banner-track {
+      display: flex;
+      white-space: nowrap;
+      animation: bannerScroll 22s linear infinite;
+      height: 100%;
+      align-items: center;
+    }
+    .banner-track span {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      padding: 0 2.5rem;
+    }
+    .banner-track span.sep {
+      color: #333;
+      padding: 0;
+    }
+    @keyframes bannerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── CLOCK ── */
+    #clock-widget {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      margin-top: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.75s forwards;
+    }
+    #clock-time {
+      font-size: 0.75rem;
+      color: var(--black);
+      letter-spacing: 0.08em;
+    }
+    #clock-date {
+      font-size: 0.65rem;
+      color: var(--grey-mid);
+      letter-spacing: 0.06em;
+    }
+    #clock-sep {
+      color: var(--grey-light);
+      font-size: 0.7rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header { padding: 1rem 1.5rem; }
+      nav { gap: 1.2rem; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 5rem 1.8rem 2rem; border-right: none; border-bottom: 1px solid var(--grey-light); }
+      #about, #projects { padding: 4rem 1.8rem; }
+      #about { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      #contact { padding: 4rem 1.8rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SNOW -->
+  <canvas id="snow-canvas"></canvas>
+
+  <!-- ANIMATED BANNER -->
+  <div id="top-banner">
+    <div class="banner-track" id="bannerTrack">
+      <span>Max — Personal Page</span><span class="sep">✦</span>
+      <span>Creator of Custom Cmdr Commands</span><span class="sep">✦</span>
+      <span>Website Designer @ Nova Syndicate</span><span class="sep">✦</span>
+      <span>Admin @ Roky's Project</span><span class="sep">✦</span>
+      <span>Always Online</span><span class="sep">✦</span>
+      <span>Very Active — Very Friendly</span><span class="sep">✦</span>
+      <!-- duplicate for seamless loop -->
+      <span>Max — Personal Page</span><span class="sep">✦</span>
+      <span>Creator of Custom Cmdr Commands</span><span class="sep">✦</span>
+      <span>Website Designer @ Nova Syndicate</span><span class="sep">✦</span>
+      <span>Admin @ Roky's Project</span><span class="sep">✦</span>
+      <span>Always Online</span><span class="sep">✦</span>
+      <span>Very Active — Very Friendly</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Max</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Links</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <span class="hero-eyebrow">Personal — 2026</span>
+      <h1 class="hero-name">Hi, I'm<br /><em>Max.</em></h1>
+      <p class="hero-desc">
+        I'm building things for my friends that matter in life — really active,
+        always around, always doing something.
+      </p>
+      <div id="clock-widget">
+        <span id="clock-date">...</span>
+        <span id="clock-sep">|</span>
+        <span id="clock-time">00:00:00</span>
+      </div>
+    </div>
+
+    <!-- Discord-style profile card -->
+    <div class="hero-right">
+      <div class="dc-card">
+        <div class="dc-banner">
+          <div class="dc-avatar-wrap">
+            <div class="dc-avatar">
+              M
+              <div class="dc-status"></div>
+            </div>
+          </div>
+        </div>
+        <div class="dc-body">
+          <div class="dc-username">Max</div>
+          <div class="dc-tag">max • always online</div>
+          <div class="dc-badges">
+            <span class="dc-badge">&#9679; Active</span>
+            <span class="dc-badge">Creator</span>
+            <span class="dc-badge">Admin</span>
+            <span class="dc-badge">Designer</span>
+          </div>
+          <div class="dc-divider"></div>
+          <div class="dc-label">About me</div>
+          <div class="dc-about">
+            Creator of Custom Cmdr Commands, Website Designer for Nova Syndicate,
+            Admin for Roky's Project. Very active but very friendly.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-text">
+      <div class="section-label reveal from-left">About me</div>
+      <h2 class="section-title reveal from-left reveal-delay-1">Who I <em style="font-style:italic;">am</em></h2>
+      <p class="reveal reveal-delay-2">
+        I'm Max — Creator of Custom Cmdr Commands, Website Designer for Nova Syndicate,
+        and Admin for a project by my friend Roky.
+      </p>
+      <p class="reveal reveal-delay-3">
+        I'm very active but very friendly to other people. I love seeing my Discord
+        and the other Discords being in perfect shape.
+      </p>
+      <p class="reveal reveal-delay-4">
+        Outside of that, I'm eating, texting with Tazz, devs or other people —
+        I'm the most active on my PC.
+      </p>
+    </div>
+    <div>
+      <div class="section-label reveal from-right">By the numbers</div>
+      <div class="stats-grid">
+        <div class="stat reveal scale-in reveal-delay-1">
+          <div class="stat-number">2+</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat reveal scale-in reveal-delay-2">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Projects Done</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label reveal from-left">What I built</div>
+    <h2 class="section-title reveal reveal-delay-1">Projects</h2>
+    <div class="projects-grid">
+
+      <!-- Custom Cmdr Commands -->
+      <div class="project-card">
+        <div class="project-tag">Discord Bot</div>
+        <div class="project-name">Custom Cmdr Commands</div>
+        <div class="project-desc">
+          A fully custom command suite for Discord — built for control,
+          flexibility and a perfect server experience.
+        </div>
+        <div class="project-links">
+          <a href="https://discord.gg/XaZSGVFvzV" target="_blank" class="project-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            Discord — discord.gg/XaZSGVFvzV
+          </a>
+          <a href="https://testaccc21.github.io" target="_blank" class="project-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            DLC — testaccc21.github.io
+          </a>
+        </div>
+      </div>
+
+      <!-- Nova Syndicate -->
+      <div class="project-card" style="animation-delay: 0.12s">
+        <div class="project-tag">Website Design</div>
+        <div class="project-name">Nova Syndicate</div>
+        <div class="project-desc">
+          Website designer for Nova Syndicate — crafting a clean and
+          strong online presence for the community.
+        </div>
+        <div class="project-links">
+          <a href="https://discord.gg/SkHmpbVYzw" target="_blank" class="project-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            Discord — discord.gg/SkHmpbVYzw
+          </a>
+          <a href="https://novasyndicate2ofc.github.io" target="_blank" class="project-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Website — novasyndicate2ofc.github.io
+          </a>
+        </div>
+      </div>
+
+      <!-- Roky's Project -->
+      <div class="project-card" style="animation-delay: 0.24s">
+        <div class="project-tag">Admin</div>
+        <div class="project-name">Roky's Project</div>
+        <div class="project-desc">
+          Admin for a project by my friend Roky — keeping things running,
+          organized, and in perfect constitution.
+        </div>
+        <div class="project-links">
+          <span class="project-link" style="opacity:0.4; cursor:default;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            More info coming soon
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT / LINKS -->
+  <section id="contact">
+    <div class="section-label reveal from-left">Find me</div>
+    <h2 class="section-title reveal reveal-delay-1">Links</h2>
+    <div class="contact-grid">
+      <div class="contact-item reveal from-left reveal-delay-2">
+        <div class="contact-item-label">Custom Cmdr Commands</div>
+        <div class="contact-item-name">Cmdr Hub</div>
+        <div class="contact-item-links">
+          <a href="https://discord.gg/XaZSGVFvzV" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            discord.gg/XaZSGVFvzV
+          </a>
+          <a href="https://testaccc21.github.io" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            testaccc21.github.io
+          </a>
+        </div>
+      </div>
+      <div class="contact-item reveal from-right reveal-delay-3">
+        <div class="contact-item-label">Nova Syndicate</div>
+        <div class="contact-item-name">Nova Hub</div>
+        <div class="contact-item-links">
+          <a href="https://discord.gg/SkHmpbVYzw" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.054a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+            discord.gg/SkHmpbVYzw
+          </a>
+          <a href="https://novasyndicate2ofc.github.io" target="_blank">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            novasyndicate2ofc.github.io
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>&#169; 2026 Max &#8212; All rights reserved.</footer>
+
+  <script>
+    // ── SNOW ──
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, flakes = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (let i = 0; i < 120; i++) {
+      flakes.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 2.5 + 0.5,
+        speed: Math.random() * 0.8 + 0.3,
+        drift: (Math.random() - 0.5) * 0.4,
+        opacity: Math.random() * 0.5 + 0.15
+      });
+    }
+
+    function drawSnow() {
+      ctx.clearRect(0, 0, W, H);
+      flakes.forEach(f => {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,200,200,${f.opacity})`;
+        ctx.fill();
+        f.y += f.speed;
+        f.x += f.drift;
+        if (f.y > H) { f.y = -5; f.x = Math.random() * W; }
+        if (f.x > W) f.x = 0;
+        if (f.x < 0) f.x = W;
+      });
+      requestAnimationFrame(drawSnow);
+    }
+    drawSnow();
+
+    // ── CLOCK (UK Time) ──
+    function updateClock() {
+      const now = new Date();
+      const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
+      const hh = String(ukTime.getHours()).padStart(2,'0');
+      const mm = String(ukTime.getMinutes()).padStart(2,'0');
+      const ss = String(ukTime.getSeconds()).padStart(2,'0');
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      document.getElementById('clock-time').textContent = `${hh}:${mm}:${ss} UK`;
+      document.getElementById('clock-date').textContent = `${days[ukTime.getDay()]}, ${ukTime.getDate()} ${months[ukTime.getMonth()]}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Autoplay music (needs user interaction first on most browsers)
+    const music = document.getElementById('bgMusic');
+    const tryPlay = () => { music.play().catch(() => {}); };
+    document.addEventListener('click', tryPlay, { once: true });
+    document.addEventListener('keydown', tryPlay, { once: true });
+    document.addEventListener('scroll', tryPlay, { once: true });
+    // Try immediately (works on some browsers)
+    music.play().catch(() => {});
+
+    // Scroll reveal — all .reveal + .project-card elements
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .project-card').forEach(el => revealObserver.observe(el));
+  </script>
+
+</body>
+</html>
