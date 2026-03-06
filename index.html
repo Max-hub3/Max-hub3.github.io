@@ -7,12 +7,33 @@
   <script>
     // ══════════════════════════════════════════
     // ⚙️  MAINTENANCE & OFFLINE MODE SETTINGS
-    // Setze true um den Modus zu aktivieren
+    // Setze true um den Modus manuell zu aktivieren
     const MAINTENANCE_MODE = false;
-    const OFFLINE_MODE     = true;
+    const OFFLINE_MODE     = false;
+
+    // 🕐 AUTOMATISCHER OFFLINE MODE (Berlin Zeit)
+    // Offline von 00:45 bis 00:50 Uhr
+    const AUTO_OFFLINE_START = { h: 0,  m: 45 };
+    const AUTO_OFFLINE_END   = { h: 0,  m: 50 };
     // ══════════════════════════════════════════
-    if (MAINTENANCE_MODE) window.location.replace('maintenance.html');
-    else if (OFFLINE_MODE) window.location.replace('offline.html');
+
+    if (MAINTENANCE_MODE) {
+      window.location.replace('maintenance.html');
+    } else if (OFFLINE_MODE) {
+      window.location.replace('offline.html');
+    } else {
+      // Automatischer Check mit Berlin Zeit
+      const now = new Date();
+      const berlin = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+      const h = berlin.getHours();
+      const m = berlin.getMinutes();
+      const total = h * 60 + m;
+      const start = AUTO_OFFLINE_START.h * 60 + AUTO_OFFLINE_START.m;
+      const end   = AUTO_OFFLINE_END.h   * 60 + AUTO_OFFLINE_END.m;
+      if (total >= start && total < end) {
+        window.location.replace('offline.html');
+      }
+    }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
   <style>
