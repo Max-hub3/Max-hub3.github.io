@@ -175,6 +175,72 @@
       animation: fadeUp 0.9s ease 0.7s forwards;
     }
 
+    /* COUNTDOWN */
+    #countdown-wrap {
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.9s forwards;
+      text-align: center;
+    }
+    .countdown-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 0.8rem;
+    }
+    #countdown-display {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+    .cd-block {
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+    }
+    .cd-block span:first-child {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      min-width: 2.4rem;
+      text-align: center;
+    }
+    .cd-unit {
+      font-size: 0.62rem !important;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey-mid) !important;
+      font-family: var(--mono) !important;
+      font-weight: 400 !important;
+    }
+    .cd-sep {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--grey-light);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    #refresh-msg {
+      display: none;
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-style: italic;
+      font-weight: 700;
+      color: var(--white);
+      text-shadow: 0 0 15px #fff, 0 0 40px #fff, 0 0 80px rgba(255,255,255,0.6);
+      cursor: pointer;
+      animation: refreshPulse 1s ease-in-out infinite;
+    }
+    #refresh-msg:hover { opacity: 0.8; }
+    @keyframes refreshPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.05); }
+    }
+
     /* LINKS */
     .link-row {
       display: flex;
@@ -256,6 +322,18 @@
       Join the Discord to stay updated or check back later!
     </p>
 
+    <div id="countdown-wrap">
+      <div class="countdown-label" id="cd-label">Back online in</div>
+      <div id="countdown-display">
+        <div class="cd-block"><span id="cd-h">00</span><span class="cd-unit">h</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-block"><span id="cd-m">00</span><span class="cd-unit">m</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-block"><span id="cd-s">00</span><span class="cd-unit">s</span></div>
+      </div>
+      <div id="refresh-msg">↻ REFRESH PAGE!</div>
+    </div>
+
     <div class="link-row">
       <a href="https://discord.gg/XaZSGVFvzV" target="_blank">Cmdr Discord</a>
       <a href="https://discord.gg/SkHmpbVYzw" target="_blank">Nova Discord</a>
@@ -296,6 +374,50 @@
       document.getElementById('clock').textContent = `${pad(uk.getHours())}:${pad(uk.getMinutes())}:${pad(uk.getSeconds())} UK`;
     }
     tick(); setInterval(tick, 1000);
+
+    // Countdown — reads end time from URL param ?end=HH:MM or falls back to 00:50
+    function getEndTime() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('end');
+      if (raw) {
+        const parts = raw.split(':');
+        if (parts.length === 2) return { h: parseInt(parts[0]), m: parseInt(parts[1]) };
+      }
+      return { h: 0, m: 50 }; // fallback
+    }
+
+    function updateCountdown() {
+      const end = getEndTime();
+      const now = new Date();
+      const berlin = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+
+      const target = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+      target.setHours(end.h, end.m, 0, 0);
+      if (berlin >= target) target.setDate(target.getDate() + 1);
+
+      const diff = target - now + (target.getTimezoneOffset() - now.getTimezoneOffset()) * 60000;
+      const totalSec = Math.max(0, Math.floor(diff / 1000));
+
+      if (totalSec <= 0) {
+        // Show REFRESH PAGE
+        document.getElementById('countdown-display').style.display = 'none';
+        document.getElementById('cd-label').style.display = 'none';
+        document.getElementById('refresh-msg').style.display = 'block';
+        return;
+      }
+
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cd-h').textContent = pad(Math.floor(totalSec / 3600));
+      document.getElementById('cd-m').textContent = pad(Math.floor((totalSec % 3600) / 60));
+      document.getElementById('cd-s').textContent = pad(totalSec % 60);
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Click REFRESH PAGE to reload
+    document.getElementById('refresh-msg').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
   </script>
 </body>
 </html>
