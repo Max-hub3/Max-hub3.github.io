@@ -28,6 +28,97 @@
       line-height: 1.7;
     }
 
+    /* ── MAINTENANCE / OFFLINE MODE ── */
+    #mode-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
+    }
+    #mode-screen.active { display: flex; }
+
+    /* Maintenance = dark */
+    #mode-screen.maintenance {
+      background: #0e0e0d;
+      color: var(--white);
+    }
+    /* Offline = lighter grey */
+    #mode-screen.offline {
+      background: #1a1a1a;
+      color: var(--white);
+    }
+
+    .mode-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.6rem;
+      animation: modePulse 2s ease-in-out infinite;
+    }
+    @keyframes modePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.08); opacity: 0.7; }
+    }
+
+    .mode-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+    .mode-sub {
+      font-size: 0.85rem;
+      color: var(--grey-mid);
+      max-width: 380px;
+      line-height: 1.9;
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+    .mode-badge {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid #333;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      animation: fadeUp 0.8s ease 0.6s both;
+    }
+
+    /* spinning gear for maintenance */
+    .gear {
+      display: inline-block;
+      animation: spin 4s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* blinking dot for offline */
+    .blink {
+      animation: blink 1.2s step-start infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* scanline effect on mode screen */
+    #mode-screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.015) 2px,
+        rgba(255,255,255,0.015) 4px
+      );
+      pointer-events: none;
+    }
+
     /* NOISE OVERLAY */
     body::before {
       content: '';
@@ -585,6 +676,14 @@
   <!-- SNOW -->
   <canvas id="snow-canvas"></canvas>
 
+  <!-- ══ MODE SCREEN (Maintenance / Offline) ══ -->
+  <div id="mode-screen">
+    <div class="mode-icon" id="mode-icon"></div>
+    <div class="mode-title" id="mode-title"></div>
+    <div class="mode-sub" id="mode-sub"></div>
+    <div class="mode-badge" id="mode-badge"></div>
+  </div>
+
   <!-- ANIMATED BANNER -->
   <div id="top-banner">
     <div class="banner-track" id="bannerTrack">
@@ -803,6 +902,19 @@
   <footer>&#169; 2026 Max &#8212; All rights reserved.</footer>
 
   <script>
+    // ══════════════════════════════════════════
+    // ⚙️  MAINTENANCE & OFFLINE MODE SETTINGS
+    // Setze true um den Modus zu aktivieren
+    const MAINTENANCE_MODE = false;
+    const OFFLINE_MODE     = false;
+    // ══════════════════════════════════════════
+
+    if (MAINTENANCE_MODE) {
+      window.location.replace('maintenance.html');
+    } else if (OFFLINE_MODE) {
+      window.location.replace('offline.html');
+    }
+
     // ── SNOW ──
     const canvas = document.getElementById('snow-canvas');
     const ctx = canvas.getContext('2d');
