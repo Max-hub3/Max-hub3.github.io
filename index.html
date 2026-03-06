@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Max — Personal</title>
+  <script>
+    // ══════════════════════════════════════════
+    // ⚙️  MAINTENANCE & OFFLINE MODE SETTINGS
+    // Setze true um den Modus zu aktivieren
+    const MAINTENANCE_MODE = false;
+    const OFFLINE_MODE     = false;
+    // ══════════════════════════════════════════
+    if (MAINTENANCE_MODE) window.location.replace('maintenance.html');
+    else if (OFFLINE_MODE) window.location.replace('offline.html');
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -902,19 +912,6 @@
   <footer>&#169; 2026 Max &#8212; All rights reserved.</footer>
 
   <script>
-    // ══════════════════════════════════════════
-    // ⚙️  MAINTENANCE & OFFLINE MODE SETTINGS
-    // Setze true um den Modus zu aktivieren
-    const MAINTENANCE_MODE = false;
-    const OFFLINE_MODE     = false;
-    // ══════════════════════════════════════════
-
-    if (MAINTENANCE_MODE) {
-      window.location.replace('maintenance.html');
-    } else if (OFFLINE_MODE) {
-      window.location.replace('offline.html');
-    }
-
     // ── SNOW ──
     const canvas = document.getElementById('snow-canvas');
     const ctx = canvas.getContext('2d');
