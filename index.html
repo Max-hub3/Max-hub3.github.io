@@ -13,8 +13,8 @@
 
     // 🕐 AUTOMATISCHER OFFLINE MODE (Berlin Zeit)
     // Offline von 00:45 bis 00:50 Uhr
-    const AUTO_OFFLINE_START = { h: 1,  m: 10 };
-    const AUTO_OFFLINE_END   = { h: 11,  m: 12 };
+    const AUTO_OFFLINE_START = { h: 11,  m: 30 };
+    const AUTO_OFFLINE_END   = { h: 11,  m: 40 };
     // ══════════════════════════════════════════
 
     if (MAINTENANCE_MODE) {
@@ -30,8 +30,10 @@
       const total = h * 60 + m;
       const start = AUTO_OFFLINE_START.h * 60 + AUTO_OFFLINE_START.m;
       const end   = AUTO_OFFLINE_END.h   * 60 + AUTO_OFFLINE_END.m;
+      // Always save latest end time so offline.html can read it
+      const endStr = String(AUTO_OFFLINE_END.h).padStart(2,'0') + ':' + String(AUTO_OFFLINE_END.m).padStart(2,'0');
+      try { localStorage.setItem('offlineEnd', endStr); } catch(e) {}
       if (total >= start && total < end) {
-        const endStr = String(AUTO_OFFLINE_END.h).padStart(2,'0') + ':' + String(AUTO_OFFLINE_END.m).padStart(2,'0');
         window.location.replace('offline.html?end=' + endStr);
       }
     }
@@ -773,7 +775,6 @@
           <div class="dc-avatar-wrap">
             <div class="dc-avatar">
               M
-              <div class="dc-status"></div>
             </div>
           </div>
         </div>
@@ -781,7 +782,6 @@
           <div class="dc-username">Max</div>
           <div class="dc-tag">max • always online</div>
           <div class="dc-badges">
-            <span class="dc-badge">&#9679; Active</span>
             <span class="dc-badge">Creator</span>
             <span class="dc-badge">Admin</span>
             <span class="dc-badge">Designer</span>
@@ -977,14 +977,17 @@
     // ── CLOCK (UK Time) ──
     function updateClock() {
       const now = new Date();
-      const ukTime = new Date(now.toLocaleString('en-GB', { timeZone: 'Europe/London' }));
-      const hh = String(ukTime.getHours()).padStart(2,'0');
-      const mm = String(ukTime.getMinutes()).padStart(2,'0');
-      const ss = String(ukTime.getSeconds()).padStart(2,'0');
-      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      document.getElementById('clock-time').textContent = `${hh}:${mm}:${ss} UK`;
-      document.getElementById('clock-date').textContent = `${days[ukTime.getDay()]}, ${ukTime.getDate()} ${months[ukTime.getMonth()]}`;
+      const timeStr = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/London',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false
+      }).format(now);
+      const dateStr = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/London',
+        weekday: 'short', day: 'numeric', month: 'short'
+      }).format(now);
+      document.getElementById('clock-time').textContent = `${timeStr} UK`;
+      document.getElementById('clock-date').textContent = dateStr;
     }
     updateClock();
     setInterval(updateClock, 1000);
