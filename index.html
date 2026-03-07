@@ -13,8 +13,8 @@
 
     // 🕐 AUTOMATISCHER OFFLINE MODE (Berlin Zeit)
     // Offline von 00:45 bis 00:50 Uhr
-    const AUTO_OFFLINE_START = { h: 0,  m: 45 };
-    const AUTO_OFFLINE_END   = { h: 0,  m: 50 };
+    const AUTO_OFFLINE_START = { h: 1,  m: 10 };
+    const AUTO_OFFLINE_END   = { h: 14,  m: 30 };
     // ══════════════════════════════════════════
 
     if (MAINTENANCE_MODE) {
@@ -31,7 +31,8 @@
       const start = AUTO_OFFLINE_START.h * 60 + AUTO_OFFLINE_START.m;
       const end   = AUTO_OFFLINE_END.h   * 60 + AUTO_OFFLINE_END.m;
       if (total >= start && total < end) {
-        window.location.replace('offline.html');
+        const endStr = String(AUTO_OFFLINE_END.h).padStart(2,'0') + ':' + String(AUTO_OFFLINE_END.m).padStart(2,'0');
+        window.location.replace('offline.html?end=' + endStr);
       }
     }
   </script>
@@ -788,7 +789,7 @@
           <div class="dc-divider"></div>
           <div class="dc-label">About me</div>
           <div class="dc-about">
-            Creator of Custom Cmdr Commands, Website Designer for Nova Syndicate,
+            Creator of Custom Cmdr Commands for Roblox, Website Designer for Nova Syndicate,
             Admin for Roky's Project. Very active but very friendly.
           </div>
         </div>
@@ -802,7 +803,7 @@
       <div class="section-label reveal from-left">About me</div>
       <h2 class="section-title reveal from-left reveal-delay-1">Who I <em style="font-style:italic;">am</em></h2>
       <p class="reveal reveal-delay-2">
-        I'm Max — Creator of Custom Cmdr Commands, Website Designer for Nova Syndicate,
+        I'm Max — Creator of Custom Cmdr Commands for Roblox, Website Designer for Nova Syndicate,
         and Admin for a project by my friend Roky.
       </p>
       <p class="reveal reveal-delay-3">
@@ -837,11 +838,11 @@
 
       <!-- Custom Cmdr Commands -->
       <div class="project-card">
-        <div class="project-tag">Discord Bot</div>
+        <div class="project-tag">Roblox System</div>
         <div class="project-name">Custom Cmdr Commands</div>
         <div class="project-desc">
-          A fully custom command suite for Discord — built for control,
-          flexibility and a perfect server experience.
+          A fully custom command system for Roblox — built for control,
+          flexibility and a perfect experience.
         </div>
         <div class="project-links">
           <a href="https://discord.gg/XaZSGVFvzV" target="_blank" class="project-link">
@@ -857,10 +858,10 @@
 
       <!-- Nova Syndicate -->
       <div class="project-card" style="animation-delay: 0.12s">
-        <div class="project-tag">Website Design</div>
+        <div class="project-tag">Website Designer</div>
         <div class="project-name">Nova Syndicate</div>
         <div class="project-desc">
-          Website designer for Nova Syndicate — crafting a clean and
+          Website Designer for Nova Syndicate — crafting a clean and
           strong online presence for the community.
         </div>
         <div class="project-links">
