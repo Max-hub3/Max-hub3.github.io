@@ -375,15 +375,16 @@
     }
     tick(); setInterval(tick, 1000);
 
-    // Countdown — reads end time from URL param ?end=HH:MM or falls back to 00:50
+    // Countdown — reads end time from URL param or localStorage
     function getEndTime() {
       const params = new URLSearchParams(window.location.search);
-      const raw = params.get('end');
+      let raw = params.get('end');
+      if (!raw) { try { raw = localStorage.getItem('offlineEnd'); } catch(e) {} }
       if (raw) {
         const parts = raw.split(':');
         if (parts.length === 2) return { h: parseInt(parts[0]), m: parseInt(parts[1]) };
       }
-      return { h: 0, m: 50 }; // fallback
+      return { h: 0, m: 50 }; // last fallback
     }
 
     function updateCountdown() {
