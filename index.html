@@ -13,8 +13,8 @@
 
     // 🕐 AUTOMATISCHER OFFLINE MODE (Berlin Zeit)
     // Offline von 00:45 bis 00:50 Uhr
-    const AUTO_OFFLINE_START = { h: 11,  m: 45 };
-    const AUTO_OFFLINE_END   = { h: 11,  m: 55 };
+    const AUTO_OFFLINE_START = { h: 21,  m: 30 };
+    const AUTO_OFFLINE_END   = { h: 3,  m: 00 };
     // ══════════════════════════════════════════
 
     if (MAINTENANCE_MODE) {
@@ -189,7 +189,7 @@
       font-weight: 700;
     }
 
-    nav { display: flex; gap: 2.2rem; }
+    nav { display: flex; gap: 2.2rem; align-items: center; }
     nav a {
       text-decoration: none;
       color: var(--grey-dark);
@@ -199,6 +199,18 @@
       transition: color 0.2s;
     }
     nav a:hover { color: var(--black); }
+    .nav-soon {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      text-decoration: none;
+      border: 1px solid var(--grey-light);
+      padding: 0.3rem 0.9rem;
+      border-radius: 4px;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-soon:hover { color: var(--black); border-color: var(--grey-mid); background: rgba(0,0,0,0.04); }
 
     /* ── HERO ── */
     #hero {
@@ -749,6 +761,7 @@
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#contact">Links</a>
+      <a href="soon.html" class="nav-soon">◈ Soon</a>
     </nav>
   </header>
 
