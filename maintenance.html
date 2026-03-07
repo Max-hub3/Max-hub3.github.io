@@ -186,6 +186,56 @@
       to   { width: 85%; }
     }
 
+    /* COUNTDOWN */
+    #countdown-wrap {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.8s forwards;
+      text-align: center;
+    }
+    .countdown-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      margin-bottom: 0.8rem;
+    }
+    #countdown-display {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+    .cd-block {
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+    }
+    .cd-block span:first-child {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+      min-width: 2.4rem;
+      text-align: center;
+    }
+    .cd-unit {
+      font-size: 0.62rem !important;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey-mid) !important;
+      font-family: var(--mono) !important;
+      font-weight: 400 !important;
+    }
+    .cd-sep {
+      font-family: var(--serif);
+      font-size: 2rem;
+      color: var(--grey-light);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
     /* BACK LINK */
     .back-link {
       font-size: 0.68rem;
@@ -260,6 +310,17 @@
       <div class="progress-bar"></div>
     </div>
 
+    <div id="countdown-wrap">
+      <div class="countdown-label">Back online in</div>
+      <div id="countdown-display">
+        <div class="cd-block"><span id="cd-h">00</span><span class="cd-unit">h</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-block"><span id="cd-m">00</span><span class="cd-unit">m</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-block"><span id="cd-s">00</span><span class="cd-unit">s</span></div>
+      </div>
+    </div>
+
     <a href="https://discord.gg/XaZSGVFvzV" target="_blank" class="back-link">Join Discord for updates</a>
   </main>
 
@@ -297,6 +358,35 @@
       document.getElementById('clock').textContent = `${pad(uk.getHours())}:${pad(uk.getMinutes())}:${pad(uk.getSeconds())} UK`;
     }
     tick(); setInterval(tick, 1000);
+
+    // Countdown to 01:00 Berlin time next occurrence
+    function updateCountdown() {
+      const now = new Date();
+      // Get current Berlin time
+      const berlinNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+
+      // Build target: today at 01:00 Berlin
+      const target = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+      target.setHours(1, 0, 0, 0);
+
+      // If 01:00 already passed today, aim for tomorrow
+      if (berlinNow >= target) {
+        target.setDate(target.getDate() + 1);
+      }
+
+      // Diff in ms (comparing UTC internally)
+      const diff = target - now + (target.getTimezoneOffset() - now.getTimezoneOffset()) * 60000;
+      const totalSec = Math.max(0, Math.floor(diff / 1000));
+      const hh = Math.floor(totalSec / 3600);
+      const mm = Math.floor((totalSec % 3600) / 60);
+      const ss = totalSec % 60;
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('cd-h').textContent = pad(hh);
+      document.getElementById('cd-m').textContent = pad(mm);
+      document.getElementById('cd-s').textContent = pad(ss);
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
