@@ -48,8 +48,87 @@
       --grey-mid: #9e9c9a;
       --grey-dark: #3a3a38;
       --black: #111110;
+      --accent: #111110;
       --serif: 'Playfair Display', Georgia, serif;
       --mono: 'DM Mono', 'Courier New', monospace;
+    }
+
+    /* SEASONAL THEMES */
+    body.theme-halloween {
+      --white: #1a0a00;
+      --grey-light: #3a1a00;
+      --grey-mid: #a05020;
+      --grey-dark: #e08030;
+      --black: #ff6a00;
+      --accent: #ff6a00;
+      background: #1a0a00 !important;
+      color: #ff9040 !important;
+    }
+    body.theme-christmas {
+      --white: #f5faf5;
+      --grey-light: #d0e8d0;
+      --grey-mid: #6a9a6a;
+      --grey-dark: #2a5a2a;
+      --black: #1a3a1a;
+      --accent: #cc2222;
+    }
+    body.theme-winter {
+      --white: #eef2f8;
+      --grey-light: #d0daf0;
+      --grey-mid: #7a8aaa;
+      --grey-dark: #2a3a5a;
+      --black: #0a1428;
+      --accent: #4a6aaa;
+    }
+    body.theme-summer {
+      --white: #fffbf0;
+      --grey-light: #f0e0b0;
+      --grey-mid: #c09040;
+      --grey-dark: #805010;
+      --black: #402000;
+      --accent: #e08000;
+    }
+    body.theme-spring {
+      --white: #f8fff0;
+      --grey-light: #d8f0c0;
+      --grey-mid: #80aa50;
+      --grey-dark: #305020;
+      --black: #102010;
+      --accent: #60aa20;
+    }
+
+    /* COLOR THEMES */
+    body.theme-red {
+      --white: #fff5f5; --grey-light: #ffd0d0; --grey-mid: #cc6060;
+      --grey-dark: #7a1a1a; --black: #3a0808; --accent: #dd2222;
+    }
+    body.theme-blue {
+      --white: #f0f5ff; --grey-light: #c8d8f8; --grey-mid: #5070cc;
+      --grey-dark: #1a2a6a; --black: #080e2a; --accent: #2255ee;
+    }
+    body.theme-green {
+      --white: #f0fff4; --grey-light: #c0ecd0; --grey-mid: #40a060;
+      --grey-dark: #0e3a20; --black: #051408; --accent: #22bb55;
+    }
+    body.theme-purple {
+      --white: #f8f0ff; --grey-light: #ddc8f8; --grey-mid: #8855cc;
+      --grey-dark: #3a1060; --black: #150828; --accent: #aa44ff;
+    }
+    body.theme-orange {
+      --white: #fff8f0; --grey-light: #ffe0b8; --grey-mid: #cc7722;
+      --grey-dark: #7a3800; --black: #301200; --accent: #ee8800;
+    }
+    body.theme-cyan {
+      --white: #f0fffe; --grey-light: #b8eef0; --grey-mid: #2299aa;
+      --grey-dark: #0a3a40; --black: #021418; --accent: #00bbcc;
+    }
+    body.theme-pink {
+      --white: #fff0f8; --grey-light: #ffc8e8; --grey-mid: #cc4488;
+      --grey-dark: #6a0a38; --black: #280010; --accent: #ee2288;
+    }
+    body.theme-gold {
+      --white: #fffbf0; --grey-light: #f0dfa0; --grey-mid: #b89020;
+      --grey-dark: #5a4000; --black: #201400; --accent: #ddaa00;
     }
 
     html { scroll-behavior: smooth; }
@@ -211,6 +290,129 @@
       transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
     .nav-soon:hover { color: var(--black); border-color: var(--grey-mid); background: rgba(0,0,0,0.04); }
+
+    /* SEASONAL GREETING BAR */
+    #theme-bar {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 0.45rem 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-align: center;
+      font-family: var(--mono);
+    }
+    body.theme-halloween #theme-bar  { display: block; background: #ff6a00; color: #1a0a00; }
+    body.theme-christmas #theme-bar  { display: block; background: #cc2222; color: #fff; }
+    body.theme-winter    #theme-bar  { display: block; background: #2a3a5a; color: #d0daf0; }
+    body.theme-summer    #theme-bar  { display: block; background: #e08000; color: #fff; }
+    body.theme-spring    #theme-bar  { display: block; background: #60aa20; color: #fff; }
+
+    /* BACK TO TOP */
+    #back-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 100;
+      width: 40px; height: 40px;
+      border: 1px solid var(--grey-light);
+      background: var(--white);
+      color: var(--grey-mid);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      border-radius: 4px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    #back-top.visible { opacity: 1; pointer-events: all; }
+    #back-top:hover { color: var(--black); border-color: var(--grey-mid); transform: translateY(-2px); }
+
+    /* SNOW TOGGLE */
+    #snow-toggle {
+      position: fixed;
+      bottom: 2rem; left: 2rem;
+      z-index: 100;
+      width: 40px; height: 40px;
+      border: 1px solid var(--grey-light);
+      background: var(--white);
+      color: var(--grey-mid);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: color 0.2s, border-color 0.2s, opacity 0.2s;
+      opacity: 0.6;
+    }
+    #snow-toggle:hover { opacity: 1; color: var(--black); border-color: var(--grey-mid); }
+    #snow-toggle.off { opacity: 0.3; }
+
+    /* THEME PICKER */
+    #theme-picker-btn {
+      position: fixed;
+      bottom: 5rem; left: 2rem;
+      z-index: 100;
+      width: 40px; height: 40px;
+      border: 1px solid var(--grey-light);
+      background: var(--white);
+      color: var(--grey-mid);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; border-radius: 4px; font-size: 1rem;
+      transition: color 0.2s, border-color 0.2s, opacity 0.2s;
+      opacity: 0.6;
+    }
+    #theme-picker-btn:hover { opacity: 1; border-color: var(--grey-mid); }
+
+    #theme-panel {
+      position: fixed;
+      bottom: 9.5rem; left: 2rem;
+      z-index: 101;
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 6px;
+      padding: 0.8rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      min-width: 160px;
+    }
+    #theme-panel.open { display: flex; }
+    .theme-panel-label {
+      font-size: 0.55rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--grey-mid);
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--grey-light);
+    }
+    .theme-swatches {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.4rem;
+    }
+    .swatch {
+      width: 22px; height: 22px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .swatch:hover { transform: scale(1.2); }
+    .swatch.active { border-color: var(--black); }
+    .swatch[data-theme="none"]       { background: #111110; }
+    .swatch[data-theme="red"]        { background: #dd2222; }
+    .swatch[data-theme="blue"]       { background: #2255ee; }
+    .swatch[data-theme="green"]      { background: #22bb55; }
+    .swatch[data-theme="purple"]     { background: #aa44ff; }
+    .swatch[data-theme="orange"]     { background: #ee8800; }
+    .swatch[data-theme="cyan"]       { background: #00bbcc; }
+    .swatch[data-theme="pink"]       { background: #ee2288; }
+    .swatch[data-theme="gold"]       { background: #ddaa00; }
+    .theme-panel-divider { font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey-mid); margin-top: 0.2rem; }
+    .season-btns { display: flex; flex-direction: column; gap: 0.3rem; }
+    .season-btn {
+      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+      text-transform: uppercase; background: none;
+      border: 1px solid var(--grey-light); color: var(--grey-dark);
+      padding: 0.3rem 0.6rem; border-radius: 3px; cursor: pointer;
+      text-align: left; transition: background 0.15s, border-color 0.15s;
+    }
+    .season-btn:hover { background: var(--grey-light); border-color: var(--grey-mid); }
+    .season-btn.active { border-color: var(--grey-dark); font-weight: bold; }
 
     /* ── HERO ── */
     #hero {
@@ -603,6 +805,89 @@
       border-top: 1px solid #1e1e1e;
     }
 
+    /* ── BACK TO TOP ── */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 200;
+      width: 38px; height: 38px;
+      border: 1px solid var(--grey-light);
+      background: var(--white);
+      color: var(--grey-dark);
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, background 0.2s, color 0.2s;
+    }
+    #back-to-top.visible { opacity: 1; pointer-events: all; }
+    #back-to-top:hover { background: var(--black); color: var(--white); }
+
+    /* ── THEME & SNOW CONTROLS ── */
+    #controls {
+      position: fixed;
+      bottom: 2rem; left: 2rem;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .ctrl-btn {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey-mid);
+      border: 1px solid var(--grey-light);
+      background: var(--white);
+      padding: 0.35rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .ctrl-btn:hover { color: var(--black); border-color: var(--grey-mid); }
+
+    /* THEME PICKER POPUP */
+    #theme-picker {
+      position: fixed;
+      bottom: 7.5rem; left: 2rem;
+      z-index: 201;
+      background: var(--white);
+      border: 1px solid var(--grey-light);
+      border-radius: 6px;
+      padding: 0.8rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.3rem;
+      min-width: 140px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    #theme-picker.open { display: flex; }
+    .theme-picker-label {
+      font-size: 0.55rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--grey-mid); margin-bottom: 0.3rem;
+    }
+    .theme-row {
+      display: flex; gap: 0.4rem; flex-wrap: wrap;
+    }
+    .theme-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      cursor: pointer; border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .theme-dot:hover { transform: scale(1.2); }
+    .theme-dot.active { border-color: var(--grey-dark); }
+    .theme-divider { height: 1px; background: var(--grey-light); margin: 0.4rem 0; }
+    .theme-option {
+      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em;
+      padding: 0.3rem 0.5rem; border-radius: 3px; cursor: pointer;
+      color: var(--grey-dark); transition: background 0.15s;
+    }
+    .theme-option:hover { background: var(--grey-light); }
+    .theme-option.active { background: var(--grey-light); font-weight: bold; }
+
     /* ANIMATIONS */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
@@ -944,6 +1229,16 @@
     </div>
   </section>
 
+  <div id="theme-bar"></div>
+
+  <button id="back-top" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M2 9l5-5 5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <button id="snow-toggle" title="Toggle snow">❄</button>
+
   <footer>&#169; 2026 Max &#8212; All rights reserved.</footer>
 
   <script>
@@ -1025,6 +1320,60 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.reveal, .project-card').forEach(el => revealObserver.observe(el));
+
+    // ── BACK TO TOP ──
+    const backTop = document.getElementById('back-top');
+    window.addEventListener('scroll', () => {
+      backTop.classList.toggle('visible', window.scrollY > 300);
+    });
+
+    // ── SNOW TOGGLE ──
+    let snowOn = true;
+    const snowToggle = document.getElementById('snow-toggle');
+    snowToggle.addEventListener('click', () => {
+      snowOn = !snowOn;
+      canvas.style.opacity = snowOn ? '1' : '0';
+      snowToggle.classList.toggle('off', !snowOn);
+    });
+
+    // ══════════════════════════════════════════
+    // 🎨 THEME EINSTELLUNGEN — Nur hier ändern!
+    //
+    // Setze ACTIVE_THEME auf eines der folgenden:
+    //   "none"       → Standard (schwarz/weiß)
+    //   "red"        → Rot
+    //   "blue"       → Blau
+    //   "green"      → Grün
+    //   "purple"     → Lila
+    //   "orange"     → Orange
+    //   "cyan"       → Cyan
+    //   "pink"       → Pink
+    //   "gold"       → Gold
+    //   "winter"     → Eisblau / Winter
+    //   "spring"     → Grün / Frühling
+    //   "summer"     → Gelb / Sommer
+    //   "halloween"  → Orange / Dark
+    //   "christmas"  → Rot / Grün
+    //
+    const ACTIVE_THEME = "winter";
+    //
+    // Banner Text der oben erscheint wenn ein saisonales Theme aktiv ist:
+    const THEME_GREETINGS = {
+      halloween:  "🎃 Happy Halloween!",
+      christmas:  "🎄 Merry Christmas!",
+      winter:     "❄️ Happy Winter!",
+      summer:     "☀️ Happy Summer!",
+      spring:     "🌸 Happy Spring!"
+    };
+    // ══════════════════════════════════════════
+
+    const allThemeClasses = ['theme-red','theme-blue','theme-green','theme-purple','theme-orange','theme-cyan','theme-pink','theme-gold','theme-winter','theme-spring','theme-summer','theme-halloween','theme-christmas'];
+    allThemeClasses.forEach(c => document.body.classList.remove(c));
+    if (ACTIVE_THEME !== "none") {
+      document.body.classList.add('theme-' + ACTIVE_THEME);
+      const bar = document.getElementById('theme-bar');
+      if (bar && THEME_GREETINGS[ACTIVE_THEME]) bar.textContent = THEME_GREETINGS[ACTIVE_THEME];
+    }
   </script>
 
 </body>
